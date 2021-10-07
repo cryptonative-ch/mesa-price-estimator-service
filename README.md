@@ -32,9 +32,38 @@ Where
   GAS_ESTIMATORS=Web3
   ```
   
- The container should now be running and can be accessed at (localhost:3000)[http://localhost:3000]
+The container should now be running and can be accessed at (localhost:3000)[http://localhost:3000]
  
-  ## Setup reverse proxy via Nginx
-  WIP
+## Setup reverse proxy via Nginx
  
-  
+Create a nginx site with following configure
+
+```nginx
+server {
+        listen 80;
+        listen [::]:80;
+        server_name price-estimator.dxdao.org;
+        # Pass everything to Docker's
+        location / {
+           proxy_pass http://localhost:8138;
+        }
+}
+server {
+        # SSL Ports
+        listen 443 ssl;
+        listen [::]:443;
+        # server name
+        server_name price-estimator.dxdao.org;
+        index index.html;
+        location / {
+                proxy_pass http://localhost:3000;
+        }
+        # SSL Certs
+        ssl_certificate /etc/letsencrypt/live/price-estimator.dxdao.org/fullchain.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/price-estimator.dxdao.org/privkey.pem; # managed by Certbot
+        include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+```
+
+
