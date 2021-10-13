@@ -7,7 +7,7 @@ The price estimator run independently from the [Solver](https://docs.gnosis.io/p
 
 ```bash
 docker run --env-file .env \
--v /var/apps/mesa-price-estimator/stablex_orderbook_xdai.bin:/app/stablex_orderbook_xdai.bin \
+-v $PWD/stablex_orderbook_xdai.bin:/app/stablex_orderbook_xdai.bin \
 -p 3000:8080 \
 -d \
 gnosispm/dex-price-estimator-rust:master
